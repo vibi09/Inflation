@@ -52,7 +52,13 @@ if st.button("Predict Future Gold Prices"):
 
         # --- Display the results ---
         st.subheader("30-Day Gold Price Forecast")
-        
+        # --- Add this block for debugging ---
+        st.subheader("Debugging Info")
+        st.write("Data for Historical Plot:")
+        st.dataframe(gold_data.tail())
+        st.write("Data for Forecast Plot:")
+        st.dataframe(prediction_df.head())
+        # --- End of debugging block ---
         # Plotly chart
         fig = go.Figure()
         
@@ -84,3 +90,4 @@ if st.button("Predict Future Gold Prices"):
         
         st.write("Predicted Prices (next 30 days):")
         st.dataframe(prediction_df)
+

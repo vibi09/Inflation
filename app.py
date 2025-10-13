@@ -51,9 +51,7 @@ if st.button("Predict Future Gold Prices"):
         )
 
         # --- Display the results ---
-        st.subheader("30-Day Gold Price Forecast")
-        # --- Add this block for debugging ---
-       # --- Display the results ---
+        # --- Display the results ---
         st.subheader("30-Day Gold Price Forecast")
         
         # --- New Matplotlib Chart ---

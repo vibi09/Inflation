@@ -38,20 +38,48 @@ if st.button("Predict Future Gold Prices"):
             new_sequence = np.append(current_sequence[0, 1:, 0], next_pred_scaled)
             current_sequence = new_sequence.reshape(1, 60, 1)
 
-        # --- Inverse scale the predictions and create dates ---
+       # --- Inverse scale the predictions and create dates ---
         predictions = scaler.inverse_transform(np.array(future_predictions).reshape(-1, 1))
         
         prediction_dates = pd.to_datetime([end_date + pd.DateOffset(days=i) for i in range(1, 31)])
-        prediction_df = pd.DataFrame(predictions, index=prediction_dates, columns=['Predicted Price'])
+        
+        # --- FIX for Table Label ---
+        prediction_df = pd.DataFrame(
+            predictions, 
+            index=prediction_dates, 
+            columns=['Predicted Price (USD per troy ounce)']
+        )
 
         # --- Display the results ---
         st.subheader("30-Day Gold Price Forecast")
         
         # Plotly chart
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=gold_data.index, y=gold_data['Close'], mode='lines', name='Historical Price'))
-        fig.add_trace(go.Scatter(x=prediction_df.index, y=prediction_df['Predicted Price'], mode='lines', name='Forecasted Price', line=dict(dash='dash')))
-        fig.update_layout(title="Gold Price Forecast", xaxis_title="Date", yaxis_title="Price (USD)")
+        
+        # --- FIX for Graph ---
+        # Add historical data trace
+        fig.add_trace(go.Scatter(
+            x=gold_data.index, 
+            y=gold_data['Close'], 
+            mode='lines', 
+            name='Historical Price'
+        ))
+        # Add forecasted data trace
+        fig.add_trace(go.Scatter(
+            x=prediction_df.index, 
+            y=prediction_df['Predicted Price (USD per troy ounce)'].values, # Use .values to ensure plotting
+            mode='lines', 
+            name='Forecasted Price', 
+            line=dict(dash='dash')
+        ))
+        
+        # --- FIX for Chart Label ---
+        fig.update_layout(
+            title="Gold Price Forecast", 
+            xaxis_title="Date", 
+            yaxis_title="Price (USD per troy ounce)"
+        )
+        
         st.plotly_chart(fig)
         
         st.write("Predicted Prices (next 30 days):")

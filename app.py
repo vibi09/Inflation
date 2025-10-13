@@ -53,41 +53,24 @@ if st.button("Predict Future Gold Prices"):
         # --- Display the results ---
         st.subheader("30-Day Gold Price Forecast")
         # --- Add this block for debugging ---
-        st.subheader("Debugging Info")
-        st.write("Data for Historical Plot:")
-        st.dataframe(gold_data.tail())
-        st.write("Data for Forecast Plot:")
-        st.dataframe(prediction_df.head())
-        # --- End of debugging block ---
-        # Plotly chart
-        fig = go.Figure()
+       # --- Display the results ---
+        st.subheader("30-Day Gold Price Forecast")
         
-        # --- FIX for Graph ---
-        # Add historical data trace
-        fig.add_trace(go.Scatter(
-            x=gold_data.index, 
-            y=gold_data['Close'], 
-            mode='lines', 
-            name='Historical Price'
-        ))
-        # Add forecasted data trace
-        fig.add_trace(go.Scatter(
-            x=prediction_df.index, 
-            y=prediction_df['Predicted Price (USD per troy ounce)'].values, # Use .values to ensure plotting
-            mode='lines', 
-            name='Forecasted Price', 
-            line=dict(dash='dash')
-        ))
+        # --- New Matplotlib Chart ---
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots(figsize=(12, 7))
+
+        ax.plot(gold_data.index, gold_data['Close'], label='Historical Price')
+        ax.plot(prediction_df.index, prediction_df.values, label='Forecasted Price', linestyle='--')
         
-        # --- FIX for Chart Label ---
-        fig.update_layout(
-            title="Gold Price Forecast", 
-            xaxis_title="Date", 
-            yaxis_title="Price (USD per troy ounce)"
-        )
+        ax.set_title('Gold Price Forecast')
+        ax.set_xlabel('Date')
+        ax.set_ylabel('Price (USD per troy ounce)')
+        ax.legend()
+        ax.grid(True)
         
-        st.plotly_chart(fig)
+        st.pyplot(fig)
+        # --- End of New Chart ---
         
         st.write("Predicted Prices (next 30 days):")
         st.dataframe(prediction_df)
-

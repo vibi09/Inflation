@@ -5,7 +5,7 @@ import pandas as pd
 from tensorflow.keras.models import load_model
 import joblib
 import plotly.graph_objs as go
-
+import matplotlib.pyplot as plt
 # --- Load the saved model and scaler ---
 model = load_model('lstm_model.h5', compile=False)
 scaler = joblib.load('scaler.gz')
@@ -109,5 +109,6 @@ if st.button("Predict Future Gold Prices"):
         
         st.write("Predicted Prices (next 30 days):")
         st.dataframe(prediction_df)
+
 
 

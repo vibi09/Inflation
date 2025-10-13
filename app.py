@@ -11,7 +11,14 @@ model = load_model('lstm_model.h5', compile=False)
 scaler = joblib.load('scaler.gz')
 
 st.title("Gold Price Inflation/Deflation Predictor 🪙")
+# --- Historical Dashboard Section ---
+st.header("Historical Price Dashboard 📈")
 
+time_period = st.selectbox(
+    "Select a time period:",
+    ("1 Week", "15 Days", "1 Month", "3 Months", "1 Year", "5 Years")
+)
+# --- End of Section ---
 st.write("""
 This application predicts the future price of gold for the next 30 days using a trained LSTM neural network.
 Click the button below to generate the forecast.
@@ -72,3 +79,4 @@ if st.button("Predict Future Gold Prices"):
         
         st.write("Predicted Prices (next 30 days):")
         st.dataframe(prediction_df)
+

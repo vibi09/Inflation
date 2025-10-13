@@ -18,7 +18,37 @@ time_period = st.selectbox(
     "Select a time period:",
     ("1 Week", "15 Days", "1 Month", "3 Months", "1 Year", "5 Years")
 )
+# Calculate start and end dates based on selection
+end_date = pd.Timestamp.now()
+if time_period == "1 Week":
+    start_date = end_date - pd.DateOffset(weeks=1)
+elif time_period == "15 Days":
+    start_date = end_date - pd.DateOffset(days=15)
+elif time_period == "1 Month":
+    start_date = end_date - pd.DateOffset(months=1)
+elif time_period == "3 Months":
+    start_date = end_date - pd.DateOffset(months=3)
+elif time_period == "1 Year":
+    start_date = end_date - pd.DateOffset(years=1)
+else: # 5 Years
+    start_date = end_date - pd.DateOffset(years=5)
+
+# Fetch and plot the data
+historical_data = yf.download("GC=F", start=start_date, end=end_date)
+
+fig_hist, ax_hist = plt.subplots(figsize=(12, 7))
+ax_hist.plot(historical_data.index, historical_data['Close'])
+ax_hist.set_title(f"Gold Price History - Last {time_period}")
+ax_hist.set_xlabel("Date")
+ax_hist.set_ylabel("Price (USD per troy ounce)")
+ax_hist.grid(True)
+
+st.pyplot(fig_hist)
+
+# Add a horizontal line for separation
+st.markdown("---")
 # --- End of Section ---
+
 st.write("""
 This application predicts the future price of gold for the next 30 days using a trained LSTM neural network.
 Click the button below to generate the forecast.
@@ -79,4 +109,5 @@ if st.button("Predict Future Gold Prices"):
         
         st.write("Predicted Prices (next 30 days):")
         st.dataframe(prediction_df)
+
 

@@ -6,3 +6,4 @@ tensorflow
 plotly
 scikit-learn
 matplotlib
+pandas-datareader
